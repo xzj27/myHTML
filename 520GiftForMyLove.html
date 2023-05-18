@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Happy every day</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        background-image: url("img/start.jpg");
+        background-size: cover;
+        background-attachment: fixed;
+        font-size: 14px;
+        font-family: "微软雅黑", "宋体", sans-serif;
+        color: #1ff0f4;
+        overflow: auto;
+      }
+      canvas {
+        background-color: rgb(255, 255, 255);
+        display: block;
+        margin: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <audio src="video/卡农.mp3" autoplay loop></audio>
+    <script>
+      // 1.创建一个cavnas
+      const canvas = document.createElement("canvas");
+      // 设置宽高,不可以使用style的形式
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      canvas.style.background = "rgba(255,255,255,0)";
+      // 把canvas组件添加到页面
+      document.body.append(canvas);
+      // 2.获取画笔
+      const ctx = canvas.getContext("2d");
+      let heartSpeed = 1.5;
+      let seedSpeed = 1.5;
+      let anim = 0;
+      let seedAnim = 0;
+      let pi = Math.PI;
+      function init() {
+        creatTextInLight("一份礼物，一封情书,点击开始我们的旅程", "60px 楷体");
+        canvas.addEventListener("click", function (event) {
+          var audio = document.querySelector("audio");
+          audio.loop = true;
+          audio.volume = 0.5;
+          audio.play();
+          bgAnimation();
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          requestAnimationFrame(startHeartAnimation);
+          canvas.removeEventListener("click");
+        });
+      }
+      function bgAnimation() {
+        // 定义一个异步加载图片的函数
+        function loadImage(url) {
+          // 返回一个 Promise 对象
+          return new Promise(function (resolve, reject) {
+            // 创建一个图片对象
+            var img = new Image();
+            // 设置 src 属性为传入的 URL
+            img.src = url;
+            // 如果图片加载成功，调用 resolve 函数并传入图片对象
+            img.onload = function () {
+              resolve(img);
+            };
+            // 如果图片加载失败，调用 reject 函数并传入错误信息
+            img.onerror = function () {
+              reject(new Error("Failed to load image: " + url));
+            };
+          });
+        }
+        // // 定义一个数组存放图片的地址
+        var images = [
+          "img/start1.jpg",
+          "img/你的名字0.jpg",
+          "img/你的名字1.jpg",
+          "img/你的名字2.jpg",
+          "img/你的名字3.jpg",
+          "img/你的名字4.jpg",
+          "img/日出0.jpg",
+          "img/日出1.jpg",
+          "img/日出2.jpg",
+          "img/夕阳0.jpg",
+          "img/夕阳1.jpg",
+          "img/夕阳2.jpg",
+          "img/夕阳3.jpg",
+          "img/摩天轮.jpg",
+          "img/森林.jpg",
+          "img/星空0.jpg",
+          "img/星空1.jpg",
+          "img/星空2.jpg",
+          "img/雪山0.jpg",
+          "img/雪山1.jpg",
+          "img/雪山2.jpg",
+          "img/end1.jpg",
+          "img/end2.jpg",
+          "img/end3.jpg",
+        ];
+        // 定义一个变量记录当前显示的图片的索引
+        var index = 0;
+        // 定义一个函数，用来随机选择一个背景图，并设置给 body 元素
+        function changeBackground() {
+          // 获取 body 元素
+          var body = document.getElementsByTagName("body")[0];
+          // 随机生成一个数组的索引
+          // var index = Math.floor(Math.random() * images.length);
+          // 获取对应的背景图的 URL
+          var image = images[index];
+          // 调用 loadImage 函数并传入背景图的 URL
+          loadImage(image)
+            // 如果加载成功，设置 body 元素的 style.backgroundImage 属性
+            .then(function (img) {
+              body.style.transition = "background-image 0.5s linear";
+              body.style.backgroundImage = "url('" + image + "')";
+            })
+            // 如果加载失败，打印错误信息
+            .catch(function (error) {
+              console.log(error);
+            });
+          index += 1;
+          index = index % images.length;
+          // if (index >= image.length) {
+          //   index = 0;
+          // }
+        }
+        changeBackground();
+        // 在页面加载时设置一个定时器，每隔 5 秒执行一次 changeBackground 函数
+        // window.onload = function () {
+        setInterval(changeBackground, 4000);
+        // };
+      }
+      function creatTextInLight(string, font) {
+        ctx.font = font;
+        ctx.textAlign = "center";
+        // 创建渐变
+        var gradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
+        gradient.addColorStop("0", "#1AFD9C");
+        gradient.addColorStop("0.25", "#B9B9FF");
+        gradient.addColorStop("0.5", "#84C1FF");
+        gradient.addColorStop("0.75", "#1AFD9C");
+        gradient.addColorStop("1", "#FF79BC");
+        // 用渐变填色
+        ctx.fillStyle = gradient;
+        ctx.fillText(string, canvas.width / 2, 80, canvas.width);
+      }
+      function creatTextInNight(string, font) {
+        ctx.font = font;
+        ctx.textAlign = "center";
+        // 创建渐变
+        var gradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
+        gradient.addColorStop("0", "#9F0050");
+        gradient.addColorStop("0.25", "#FFFF6F");
+        gradient.addColorStop("0.5", "#80FFFF");
+        gradient.addColorStop("1", "#FFFF6F");
+        // 用渐变填色
+        ctx.fillStyle = gradient;
+        ctx.fillText(string, canvas.width / 2, 80, canvas.width);
+      }
+
+      function startHeartAnimation() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        creatTextInLight(
+          "从2014年夏天的初次邂逅，几经波折，两颗心慢慢靠近，终于在2022年2月17日再次贴在了一起",
+          "38px 楷体"
+        );
+        anim += heartSpeed;
+
+        let x = anim;
+        let y = canvas.height / 3;
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.bezierCurveTo(x - 80, y - 100, x - 150, y * 1.2, x, y * 1.5);
+        ctx.stroke();
+        ctx.fillStyle = "hotpink";
+        ctx.shadowColor = "hotpink";
+        ctx.shadowBlur = "5";
+        ctx.fill();
+        ctx.closePath();
+
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.bezierCurveTo(x + 80, y - 100, x + 150, y * 1.2, x, y * 1.5);
+        ctx.stroke();
+        ctx.fillStyle = "hotpink";
+        ctx.shadowColor = "hotpink";
+        ctx.shadowBlur = "5";
+        ctx.fill();
+        ctx.closePath();
+
+        ctx.beginPath();
+        let x1 = canvas.width - anim;
+        let y1 = canvas.height / 3;
+        ctx.moveTo(x1, y1);
+        ctx.bezierCurveTo(x1 - 80, y1 - 100, x1 - 150, y1 * 1.2, x1, y1 * 1.5);
+        ctx.stroke();
+        ctx.fillStyle = "red";
+        ctx.shadowColor = "red";
+        ctx.shadowBlur = "5";
+        ctx.fill();
+        ctx.closePath();
+
+        ctx.beginPath();
+        ctx.moveTo(x1, y1);
+        ctx.bezierCurveTo(x1 + 80, y1 - 100, x1 + 150, y1 * 1.2, x1, y1 * 1.5);
+        ctx.stroke();
+        ctx.fillStyle = "red";
+        ctx.shadowColor = "red";
+        ctx.shadowBlur = "5";
+        ctx.fill();
+        ctx.closePath();
+
+        if (x < canvas.width / 2 && x1 > canvas.width / 2) {
+          requestAnimationFrame(startHeartAnimation);
+        } else {
+          cancelAnimationFrame(requestAnimationFrame(startHeartAnimation));
+          setTimeout(() => {}, 800);
+          ctx.clearRect(0, 0, canvas.width, 100);
+          creatTextInNight(
+            "恋爱的种子在两个人心里慢慢落地、发芽、成长",
+            "40px 楷体"
+          );
+          requestAnimationFrame(seedAnimation);
+        }
+      }
+      function seedAnimation() {
+        seedAnim += seedSpeed;
+        //种子落地的动画
+        let x = canvas.width / 2;
+        let y = (canvas.height * 5) / 12;
+        ctx.clearRect(0, 100, canvas.width, canvas.height);
+        const radialGradient = ctx.createRadialGradient(x, y, 0, x, y, 25);
+        // 添加渐变颜色
+        radialGradient.addColorStop(0, "hotpink");
+        radialGradient.addColorStop(1, "red");
+
+        ctx.beginPath();
+        ctx.arc(x, y + seedAnim, 25, 0, 2 * pi);
+        ctx.fillStyle = radialGradient;
+        ctx.shadowColor = "red";
+        ctx.shadowBlur = 10;
+        ctx.fill();
+        ctx.stroke();
+        ctx.closePath();
+        if (y + seedAnim < canvas.height - 50) {
+          requestAnimationFrame(seedAnimation);
+        } else {
+          cancelAnimationFrame(requestAnimationFrame(seedAnimation));
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          treeGrow();
+        }
+      }
+      function treeGrow() {
+        creatTextInNight(
+          "小树苗长成了五彩缤纷的大树，一如我们的感情慢慢地根深蒂固",
+          "40px 楷体"
+        );
+        // 1.创建一个iframe
+        const iframe = document.createElement("iframe");
+        // 设置宽高,不可以使用style的形式
+        iframe.width = window.innerWidth;
+        iframe.height = (window.innerHeight * 20) / 20;
+        iframe.style.position = "absolute";
+        iframe.style.top = "0vh";
+        iframe.style.border = "none";
+
+        iframe.src = "tree.html";
+        document.body.append(iframe);
+        setTimeout(() => {
+          // document.body.style.backgroundImage = "./bg1.jpg";
+          iframe.src = "skystar.html";
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          creatTextInNight("心里有很多想说的话，都变成了诗", "40px 楷体");
+          setTimeout(() => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            creatTextInNight(
+              "不知道看到这里，会不会有一点点感动呢",
+              "40px 楷体"
+            );
+          }, 4000);
+        }, 15000);
+      }
+      init();
+    </script>
+  </body>
+</html>
