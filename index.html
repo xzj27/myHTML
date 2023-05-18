@@ -27,6 +27,19 @@
   <body>
     <audio src="video/卡农.mp3" autoplay loop></audio>
     <script>
+      // 想说的话
+      const loveWords = [
+        "一份礼物，一封情书,点击开始我们的旅程",
+        "2014年夏天，一个女孩走进了我的世界，几经波折，两颗心慢慢靠近",
+        "终于在2022年2月17日再次贴在了一起，恋爱的种子在两个人心里慢慢落地、发芽、生根",
+        "虽经历风雨，小树苗还是长成了五彩缤纷的大树，一如我们的感情慢慢地根深蒂固",
+        "心里有很多想说的话，都变成了诗",
+        "想陪你一起去海边看日出日落，浮光起落影成双，漫步深浅两人行",
+        "想陪你一起去山上看星光灿烂，江南不似银河远，相思尤可寄繁星",
+        "想陪你一起去高原看雪山草原，真情只待雪融处，莲生",
+        "还想陪你一起吃遍没吃过的美食，看遍这世间的春夏秋冬",
+        "虽然此刻我们相望南北，但是心的距离就在咫尺",
+      ];
       // 1.创建一个cavnas
       const canvas = document.createElement("canvas");
       // 设置宽高,不可以使用style的形式
@@ -43,7 +56,7 @@
       let seedAnim = 0;
       let pi = Math.PI;
       function init() {
-        creatTextInLight("一份礼物，一封情书,点击开始我们的旅程", "60px 楷体");
+        creatTextInLight(loveWords[0], "60px 楷体");
         canvas.addEventListener("click", function (event) {
           var audio = document.querySelector("audio");
           audio.loop = true;
@@ -82,6 +95,9 @@
           "img/你的名字2.jpg",
           "img/你的名字3.jpg",
           "img/你的名字4.jpg",
+          "img/过渡.jpg",
+          "img/end1.jpg",
+          "img/end2.jpg",
           "img/日出0.jpg",
           "img/日出1.jpg",
           "img/日出2.jpg",
@@ -94,11 +110,13 @@
           "img/星空0.jpg",
           "img/星空1.jpg",
           "img/星空2.jpg",
+          "img/星空3.jpg",
+          "img/星空4.jpg",
+          "img/星空5.jpg",
           "img/雪山0.jpg",
           "img/雪山1.jpg",
           "img/雪山2.jpg",
-          "img/end1.jpg",
-          "img/end2.jpg",
+
           "img/end3.jpg",
         ];
         // 定义一个变量记录当前显示的图片的索引
@@ -131,7 +149,7 @@
         changeBackground();
         // 在页面加载时设置一个定时器，每隔 5 秒执行一次 changeBackground 函数
         // window.onload = function () {
-        setInterval(changeBackground, 4000);
+        setInterval(changeBackground, 4500);
         // };
       }
       function creatTextInLight(string, font) {
@@ -139,11 +157,11 @@
         ctx.textAlign = "center";
         // 创建渐变
         var gradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
-        gradient.addColorStop("0", "#1AFD9C");
-        gradient.addColorStop("0.25", "#B9B9FF");
-        gradient.addColorStop("0.5", "#84C1FF");
-        gradient.addColorStop("0.75", "#1AFD9C");
-        gradient.addColorStop("1", "#FF79BC");
+        gradient.addColorStop("0", "#00CACA");
+        gradient.addColorStop("0.25", "#9393FF");
+        gradient.addColorStop("0.5", "#46A3FF");
+        gradient.addColorStop("0.75", "#02DF82");
+        gradient.addColorStop("1", "#F00F80");
         // 用渐变填色
         ctx.fillStyle = gradient;
         ctx.fillText(string, canvas.width / 2, 80, canvas.width);
@@ -164,10 +182,7 @@
 
       function startHeartAnimation() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        creatTextInLight(
-          "从2014年夏天的初次邂逅，几经波折，两颗心慢慢靠近，终于在2022年2月17日再次贴在了一起",
-          "38px 楷体"
-        );
+        creatTextInLight(loveWords[1], "38px 楷体");
         anim += heartSpeed;
 
         let x = anim;
@@ -220,10 +235,7 @@
           cancelAnimationFrame(requestAnimationFrame(startHeartAnimation));
           setTimeout(() => {}, 800);
           ctx.clearRect(0, 0, canvas.width, 100);
-          creatTextInNight(
-            "恋爱的种子在两个人心里慢慢落地、发芽、成长",
-            "40px 楷体"
-          );
+          creatTextInNight(loveWords[2], "40px 楷体");
           requestAnimationFrame(seedAnimation);
         }
       }
@@ -255,10 +267,7 @@
         }
       }
       function treeGrow() {
-        creatTextInNight(
-          "小树苗长成了五彩缤纷的大树，一如我们的感情慢慢地根深蒂固",
-          "40px 楷体"
-        );
+        creatTextInNight(loveWords[3], "40px 楷体");
         // 1.创建一个iframe
         const iframe = document.createElement("iframe");
         // 设置宽高,不可以使用style的形式
@@ -274,14 +283,16 @@
           // document.body.style.backgroundImage = "./bg1.jpg";
           iframe.src = "skystar.html";
           ctx.clearRect(0, 0, canvas.width, canvas.height);
-          creatTextInNight("心里有很多想说的话，都变成了诗", "40px 楷体");
-          setTimeout(() => {
+          creatTextInNight(loveWords[4], "40px 楷体");
+          let idx = 5;
+          var timer = setInterval(() => {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            creatTextInNight(
-              "不知道看到这里，会不会有一点点感动呢",
-              "40px 楷体"
-            );
-          }, 4000);
+            creatTextInNight(loveWords[idx], "40px 楷体");
+            idx += 1;
+            if (idx >= loveWords.length) {
+              clearInterval(timer);
+            }
+          }, 6000);
         }, 15000);
       }
       init();

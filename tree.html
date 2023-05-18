@@ -294,12 +294,12 @@
 
           t.init(ctx);
 
-          for (var i = 0; i < 3; i++) {
+          for (var i = 0; i < 5; i++) {
             new Branch(
               new Vector(center_x, canvas_height),
               new Vector(Math.random(-1, 1), -y_speed),
               15 / stretch_factor,
-              Branch.randomrgba(0, 255, 0.3),
+              Branch.randomrgba(10, 240, 0.9),
               t
             );
           }
