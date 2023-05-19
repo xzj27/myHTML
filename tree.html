@@ -99,7 +99,7 @@
 
           this.tree = t || null;
 
-          this.color = c || "rgba(255,255,255,1.0)";
+          this.color = c || "rgba(235,235,235,1.0)";
 
           this.register();
         };
@@ -134,20 +134,16 @@
 
             this.v.rotate(Branch.random(-angle, angle)); //.mult(0.996);
 
-            if (this.r < 0.8 || this.generation > 10) {
+            if (this.r < 0.7 || this.generation > 13) {
               this.tree.removeBranch(this);
-
               var l = new Leaf(this.p, 10, this.color, this.tree.ctx);
-
               l.render();
             }
           },
 
           grow: function () {
             this.draw();
-
             this.modify();
-
             this.fork();
           },
 
@@ -277,15 +273,10 @@
           var $statMsg = $("#statMsg");
 
           // tx
-
           var canvas = $("#canvas")[0];
-
           canvas.width = canvas_width;
-
           canvas.height = canvas_height;
-
           var ctx = canvas.getContext("2d");
-
           ctx.globalCompositeOperation = "lighter";
 
           // tree
@@ -299,7 +290,7 @@
               new Vector(center_x, canvas_height),
               new Vector(Math.random(-1, 1), -y_speed),
               15 / stretch_factor,
-              Branch.randomrgba(10, 240, 0.9),
+              Branch.randomrgba(0, 255, 0.3),
               t
             );
           }
