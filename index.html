@@ -37,8 +37,9 @@
         "心里装满了你，每天都是晴天",
         "流星闪过，想抓着你的手为我们的未来许下愿望，我会努力去实现",
         "想带你一起去海边等待日出日落，浮光起落成双影，漫步深浅两人行",
-        "想带你一起去山上欣赏星光灿烂，江南不似银河远，相思尤可寄繁星",
-        "想带你一起去河边体验野外露营，惟愿桃源清净地，杏花落处心相随",
+        "想带你一起去山上感受星光灿烂，江南不似银河远，相思尤可寄繁星",
+        "想带你一起去河边体验野外露营，但寻世间桃源在，为求杏花独占馨",
+        "想带你一起在湖心欣赏月色如水，思如沧海凉如月，又念红妆到夜明",
         "想带你一起去武汉看落樱缤纷，去青海观七彩丹霞，去云南登玉龙雪山，去乌镇游江南水道",
         "还想陪你一起吃遍没吃过的美食，看遍这世间的春夏秋冬",
         "想说的话太多，想做的事太多，从未想象没有你的未来，只因我相信我会变得更好",
@@ -141,6 +142,8 @@
           "img/夕阳3.jpg",
           "img/摩天轮.jpg",
           "img/森林.jpg",
+          "img/雪山0.jpg",
+          "img/雪山1.jpg",
           "img/星空0.jpg",
           "img/星空1.jpg",
           "img/星空2.jpg",
@@ -148,8 +151,6 @@
           "img/星空4.jpg",
           "img/星空5.jpg",
           "img/星空6.jpg",
-          "img/雪山0.jpg",
-          "img/雪山1.jpg",
           "img/夜空.jpg",
           "img/end3.jpg",
         ];
@@ -167,7 +168,7 @@
             .then(function (img) {
               // body.style.transition = "background-image 2s ease-in-out 0.5";
               body.style.transition =
-                "background-image 1.5s cubic-bezier(0.4, 0.8, 0.9, 0.6)";
+                "background-image 1.5s cubic-bezier(0.4, 0.8, 1, 0.6) 0.5s";
               body.style.backgroundImage = "url('" + image + "')";
             })
             // 如果加载失败，打印错误信息
@@ -183,7 +184,6 @@
         // 在页面加载时设置一个定时器，每隔 5 秒执行一次 changeBackground 函数
         // window.onload = function () {
         bgtimer = setInterval(changeBackground, 5000);
-        // };
       }
       function creatTextInLight(string, font) {
         ctx.font = font;
@@ -204,11 +204,11 @@
         ctx.textAlign = "center";
         // 创建渐变
         var gradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
-        gradient.addColorStop("0", "#FF0000");
-        gradient.addColorStop("0.25", "#FFC78E");
-        gradient.addColorStop("0.5", "#E8FFC4");
-        gradient.addColorStop("0.75", "#00FFFF");
-        gradient.addColorStop("1", "#1AFD9C");
+        gradient.addColorStop(0, "#FF0000");
+        gradient.addColorStop(0.25, "#FFC78E");
+        gradient.addColorStop(0.5, "#E8FFC4");
+        gradient.addColorStop(0.75, "#00FFFF");
+        gradient.addColorStop(1, "#1AFD9C");
         // 用渐变填色
         ctx.fillStyle = gradient;
         ctx.fillText(string, canvas.width / 2, 80, canvas.width);
@@ -216,7 +216,7 @@
 
       function startHeartAnimation() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        creatTextInLight(loveWords[1], "38px 楷体");
+        creatTextInLight(loveWords[1], "48px 楷体");
         anim += heartSpeed;
 
         let x = anim;
@@ -269,7 +269,7 @@
           cancelAnimationFrame(requestAnimationFrame(startHeartAnimation));
           setTimeout(() => {}, 800);
           ctx.clearRect(0, 0, canvas.width, 100);
-          creatTextInNight(loveWords[2], "40px 楷体");
+          creatTextInNight(loveWords[2], "48px 楷体");
           requestAnimationFrame(seedAnimation);
         }
       }
@@ -279,16 +279,26 @@
         let x = canvas.width / 2;
         let y = (canvas.height * 5) / 12;
         ctx.clearRect(0, 100, canvas.width, canvas.height);
-        const radialGradient = ctx.createRadialGradient(x, y, 0, x, y, 25);
+        const radialGradient = ctx.createRadialGradient(
+          x,
+          y + seedAnim,
+          0,
+          x,
+          y + seedAnim,
+          25
+        );
         // 添加渐变颜色
         radialGradient.addColorStop(0, "hotpink");
-        radialGradient.addColorStop(1, "red");
+        radialGradient.addColorStop(0.25, "#FFC78E");
+        radialGradient.addColorStop(0.5, "#E8FFC4");
+        radialGradient.addColorStop(0.75, "#00FFFF");
+        radialGradient.addColorStop(1, "#02C874");
 
         ctx.beginPath();
         ctx.arc(x, y + seedAnim, 25, 0, 2 * pi);
         ctx.fillStyle = radialGradient;
         ctx.shadowColor = "red";
-        ctx.shadowBlur = 10;
+        ctx.shadowBlur = 0;
         ctx.fill();
         ctx.stroke();
         ctx.closePath();
@@ -317,7 +327,7 @@
           // document.body.style.backgroundImage = "./bg1.jpg";
           iframe.src = "skystar.html";
           ctx.clearRect(0, 0, canvas.width, canvas.height);
-          creatTextInNight(loveWords[4], "40px 楷体");
+          creatTextInNight(loveWords[4], "48px 楷体");
           let idx = 5;
           var timer = setInterval(() => {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -330,7 +340,7 @@
               clearInterval(timer);
             }
           }, 6000);
-        }, 15000);
+        }, 18000);
       }
       init();
     </script>

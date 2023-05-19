@@ -124,7 +124,7 @@
           },
 
           modify: function () {
-            var angle = 0.18 - 0.1 / this.generation;
+            var angle = Math.random() * (0.18 - 0.145) + 0.145 - 0.1 / this.generation;
 
             this.p.add(this.v);
 
@@ -199,15 +199,11 @@
 
         var Tree = function () {
           var branches = [];
-
           var timer;
-
           this.stat = {
             fork: 0,
-
             length: 0,
           };
-
           this.addBranch = function (b) {
             branches.push(b);
           };
@@ -262,7 +258,7 @@
 
           var canvas_width = $window.width();
 
-          var canvas_height = $window.height() - 30;
+          var canvas_height = $window.height() - 15;
 
           var center_x = canvas_width / 2;
 
@@ -280,12 +276,10 @@
           ctx.globalCompositeOperation = "lighter";
 
           // tree
-
           var t = new Tree();
-
           t.init(ctx);
 
-          for (var i = 0; i < 5; i++) {
+          for (var i = 0; i < 6; i++) {
             new Branch(
               new Vector(center_x, canvas_height),
               new Vector(Math.random(-1, 1), -y_speed),
