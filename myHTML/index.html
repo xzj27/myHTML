@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Happy every day</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        background-image: url("img/start.jpg");
+        background-size: cover;
+        background-attachment: fixed;
+        font-size: 14px;
+        font-family: "微软雅黑", "宋体", sans-serif;
+        color: #1ff0f4;
+        overflow: auto;
+      }
+      canvas {
+        background-color: rgb(255, 255, 255);
+        display: block;
+        margin: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <audio></audio>
+    <script>
+      // 想说的话
+      const loveWords = [
+        "一份礼物，一封情书,点击开始我们的旅程",
+        "2014年夏天，一个女孩走进了我的世界，几经波折，两颗心慢慢靠近",
+        "终于在2022年2月17日，恋爱的种子在两个人心里慢慢落地、发芽、生根",
+        "虽经历风雨，小树苗还是长成了五彩缤纷的大树，一如我们的感情慢慢地根深蒂固",
+        "心里有很多想说的话，都变成了诗",
+        "心里装满了你，每天都是晴天",
+        "流星闪过，想抓着你的手为我们的未来许下愿望，我会努力去实现",
+        "想带你一起去海边等待日出日落，浮光起落成双影，漫步深浅两人行",
+        "想带你一起去山上欣赏星光灿烂，江南不似银河远，相思尤可寄繁星",
+        "想带你一起去河边体验野外露营，惟愿桃源清净地，杏花落处心相随",
+        "想带你一起去武汉看落樱缤纷，去青海观七彩丹霞，去云南登玉龙雪山，去乌镇游江南水道",
+        "还想陪你一起吃遍没吃过的美食，看遍这世间的春夏秋冬",
+        "想说的话太多，想做的事太多，从未想象没有你的未来，只因我相信我会变得更好",
+        "虽然我们相望南北，但我相信，距离之于爱情就像风之于火",
+        "他吹熄那些微弱的，他助长那些强烈的",
+        "想给你多一点的安全感，我还需要更多的锻炼，感谢宝贝愿意陪我进行这场长跑",
+        "希望这个小礼物能够让你感受到老许能够带给你的一点点仪式感",
+        "最后，往后余生，每天都是情人节,风雪是你，平淡是你，目光所在都是你",
+      ];
+      var audio = document.querySelector("audio");
+      const music = [
+        "video/卡农.mp3",
+        "video/梦中的婚礼.mp3",
+        "video/所爱隔山海.mp3",
+        "video/所念皆星河.mp3",
+        "video/追光者.mp3",
+      ];
+      // 1.创建一个cavnas
+      const canvas = document.createElement("canvas");
+      // 设置宽高,不可以使用style的形式
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      canvas.style.background = "rgba(255,255,255,0)";
+      // 把canvas组件添加到页面
+      document.body.append(canvas);
+      // 2.获取画笔
+      const ctx = canvas.getContext("2d");
+      let heartSpeed = 1.5;
+      let seedSpeed = 1.5;
+      let anim = 0;
+      let seedAnim = 0;
+      let pi = Math.PI;
+      var bgtimer;
+      //定义一个函数，用来随机选择一个音乐源
+      function randomMusic() {
+        //获取数组的长度
+        var length = music.length;
+        //生成一个0到length-1之间的随机整数
+        var index = Math.floor(Math.random() * length);
+        //返回数组中对应索引的元素
+        return music[index];
+      }
+
+      function init() {
+        creatTextInLight(loveWords[0], "60px 楷体");
+        var clickListener = canvas.addEventListener("click", function (event) {
+          //设置audio的初始音乐源为随机选择的一个
+          audio.src = randomMusic();
+          audio.play();
+          //添加一个事件监听器，当音乐播放结束时，执行一个回调函数
+          audio.addEventListener("ended", function () {
+            //设置audio的音乐源为随机选择的一个
+            audio.src = randomMusic();
+            audio.volume = 0.5;
+            //重新加载音乐
+            audio.load();
+            //播放音乐
+            audio.play();
+          });
+          bgAnimation();
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          requestAnimationFrame(startHeartAnimation);
+          canvas.removeEventListener("click", canvas.clickListener);
+        });
+      }
+      function bgAnimation() {
+        // 定义一个异步加载图片的函数
+        function loadImage(url) {
+          // 返回一个 Promise 对象
+          return new Promise(function (resolve, reject) {
+            // 创建一个图片对象
+            var img = new Image();
+            // 设置 src 属性为传入的 URL
+            img.src = url;
+            // 如果图片加载成功，调用 resolve 函数并传入图片对象
+            img.onload = function () {
+              resolve(img);
+            };
+            // 如果图片加载失败，调用 reject 函数并传入错误信息
+            img.onerror = function () {
+              reject(new Error("Failed to load image: " + url));
+            };
+          });
+        }
+        // // 定义一个数组存放图片的地址
+        var images = [
+          "img/start1.jpg",
+          "img/你的名字0.jpg",
+          "img/你的名字1.jpg",
+          "img/你的名字2.jpg",
+          "img/你的名字3.jpg",
+          "img/你的名字4.jpg",
+          "img/过渡.jpg",
+          "img/end1.jpg",
+          "img/end2.jpg",
+          "img/日出0.jpg",
+          "img/日出2.jpg",
+          "img/夕阳0.jpg",
+          "img/夕阳2.jpg",
+          "img/夕阳3.jpg",
+          "img/摩天轮.jpg",
+          "img/森林.jpg",
+          "img/星空0.jpg",
+          "img/星空1.jpg",
+          "img/星空2.jpg",
+          "img/星空3.jpg",
+          "img/星空4.jpg",
+          "img/星空5.jpg",
+          "img/星空6.jpg",
+          "img/雪山0.jpg",
+          "img/雪山1.jpg",
+          "img/夜空.jpg",
+          "img/end3.jpg",
+        ];
+        // 定义一个变量记录当前显示的图片的索引
+        var index = 0;
+        // 定义一个函数，用来随机选择一个背景图，并设置给 body 元素
+        function changeBackground() {
+          // 获取 body 元素
+          var body = document.getElementsByTagName("body")[0];
+          // 获取对应的背景图的 URL
+          var image = images[index];
+          // 调用 loadImage 函数并传入背景图的 URL
+          loadImage(image)
+            // 如果加载成功，设置 body 元素的 style.backgroundImage 属性
+            .then(function (img) {
+              // body.style.transition = "background-image 2s ease-in-out 0.5";
+              body.style.transition =
+                "background-image 1.5s cubic-bezier(0.4, 0.8, 0.9, 0.6)";
+              body.style.backgroundImage = "url('" + image + "')";
+            })
+            // 如果加载失败，打印错误信息
+            .catch(function (error) {
+              console.log(error);
+            });
+          index += 1;
+          if (index == images.length) {
+            clearInterval(bgtimer);
+          }
+        }
+        changeBackground();
+        // 在页面加载时设置一个定时器，每隔 5 秒执行一次 changeBackground 函数
+        // window.onload = function () {
+        bgtimer = setInterval(changeBackground, 5000);
+        // };
+      }
+      function creatTextInLight(string, font) {
+        ctx.font = font;
+        ctx.textAlign = "center";
+        // 创建渐变
+        var gradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
+        gradient.addColorStop("0", "#8CEA00");
+        gradient.addColorStop("0.25", "#95CACA");
+        gradient.addColorStop("0.5", "#FFFF6F");
+        gradient.addColorStop("0.75", "#00CACA");
+        gradient.addColorStop("1", "#02C874");
+        // 用渐变填色
+        ctx.fillStyle = gradient;
+        ctx.fillText(string, canvas.width / 2, 80, canvas.width);
+      }
+      function creatTextInNight(string, font) {
+        ctx.font = font;
+        ctx.textAlign = "center";
+        // 创建渐变
+        var gradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
+        gradient.addColorStop("0", "#FF0000");
+        gradient.addColorStop("0.25", "#FFC78E");
+        gradient.addColorStop("0.5", "#E8FFC4");
+        gradient.addColorStop("0.75", "#00FFFF");
+        gradient.addColorStop("1", "#1AFD9C");
+        // 用渐变填色
+        ctx.fillStyle = gradient;
+        ctx.fillText(string, canvas.width / 2, 80, canvas.width);
+      }
+
+      function startHeartAnimation() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        creatTextInLight(loveWords[1], "38px 楷体");
+        anim += heartSpeed;
+
+        let x = anim;
+        let y = canvas.height / 3;
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.bezierCurveTo(x - 80, y - 100, x - 150, y * 1.2, x, y * 1.5);
+        ctx.stroke();
+        ctx.fillStyle = "hotpink";
+        ctx.shadowColor = "hotpink";
+        ctx.shadowBlur = "5";
+        ctx.fill();
+        ctx.closePath();
+
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.bezierCurveTo(x + 80, y - 100, x + 150, y * 1.2, x, y * 1.5);
+        ctx.stroke();
+        ctx.fillStyle = "hotpink";
+        ctx.shadowColor = "hotpink";
+        ctx.shadowBlur = "5";
+        ctx.fill();
+        ctx.closePath();
+
+        ctx.beginPath();
+        let x1 = canvas.width - anim;
+        let y1 = canvas.height / 3;
+        ctx.moveTo(x1, y1);
+        ctx.bezierCurveTo(x1 - 80, y1 - 100, x1 - 150, y1 * 1.2, x1, y1 * 1.5);
+        ctx.stroke();
+        ctx.fillStyle = "red";
+        ctx.shadowColor = "red";
+        ctx.shadowBlur = "5";
+        ctx.fill();
+        ctx.closePath();
+
+        ctx.beginPath();
+        ctx.moveTo(x1, y1);
+        ctx.bezierCurveTo(x1 + 80, y1 - 100, x1 + 150, y1 * 1.2, x1, y1 * 1.5);
+        ctx.stroke();
+        ctx.fillStyle = "red";
+        ctx.shadowColor = "red";
+        ctx.shadowBlur = "5";
+        ctx.fill();
+        ctx.closePath();
+
+        if (x < canvas.width / 2 && x1 > canvas.width / 2) {
+          requestAnimationFrame(startHeartAnimation);
+        } else {
+          cancelAnimationFrame(requestAnimationFrame(startHeartAnimation));
+          setTimeout(() => {}, 800);
+          ctx.clearRect(0, 0, canvas.width, 100);
+          creatTextInNight(loveWords[2], "40px 楷体");
+          requestAnimationFrame(seedAnimation);
+        }
+      }
+      function seedAnimation() {
+        seedAnim += seedSpeed;
+        //种子落地的动画
+        let x = canvas.width / 2;
+        let y = (canvas.height * 5) / 12;
+        ctx.clearRect(0, 100, canvas.width, canvas.height);
+        const radialGradient = ctx.createRadialGradient(x, y, 0, x, y, 25);
+        // 添加渐变颜色
+        radialGradient.addColorStop(0, "hotpink");
+        radialGradient.addColorStop(1, "red");
+
+        ctx.beginPath();
+        ctx.arc(x, y + seedAnim, 25, 0, 2 * pi);
+        ctx.fillStyle = radialGradient;
+        ctx.shadowColor = "red";
+        ctx.shadowBlur = 10;
+        ctx.fill();
+        ctx.stroke();
+        ctx.closePath();
+        if (y + seedAnim < canvas.height - 50) {
+          requestAnimationFrame(seedAnimation);
+        } else {
+          cancelAnimationFrame(requestAnimationFrame(seedAnimation));
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          treeGrow();
+        }
+      }
+      function treeGrow() {
+        creatTextInNight(loveWords[3], "40px 楷体");
+        // 1.创建一个iframe
+        const iframe = document.createElement("iframe");
+        // 设置宽高,不可以使用style的形式
+        iframe.width = window.innerWidth;
+        iframe.height = (window.innerHeight * 20) / 20;
+        iframe.style.position = "absolute";
+        iframe.style.top = "0vh";
+        iframe.style.border = "none";
+
+        iframe.src = "tree.html";
+        document.body.append(iframe);
+        setTimeout(() => {
+          // document.body.style.backgroundImage = "./bg1.jpg";
+          iframe.src = "skystar.html";
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          creatTextInNight(loveWords[4], "40px 楷体");
+          let idx = 5;
+          var timer = setInterval(() => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            creatTextInNight(loveWords[idx], "40px 楷体");
+            if (idx == 11) {
+              iframe.src = "樱花雨.html";
+            }
+            idx += 1;
+            if (idx >= loveWords.length) {
+              clearInterval(timer);
+            }
+          }, 6000);
+        }, 15000);
+      }
+      init();
+    </script>
+  </body>
+</html>
